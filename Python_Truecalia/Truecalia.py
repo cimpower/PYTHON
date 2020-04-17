@@ -28,7 +28,7 @@ def get_all_lists(soup):
 
 def get_table_headers():
     """Given a table soup, returns all the headers"""
-    headers = ['VACIO','ORIGEN-DESTINO','HORARIO','PRECIO','VENDIDO','xxx']
+    headers = ['VACIO','ORIGEN-DESTINO','HORARIO','PRECIO','VENDIDO']
     # for li in lis.find("li").find_all("span"):
     #     headers.append(li.text.strip())     
     #     #print(th) 
