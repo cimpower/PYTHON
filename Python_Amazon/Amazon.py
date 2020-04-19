@@ -75,9 +75,9 @@ def email():
     server.login('javiemg@gmail.com', 'efrgapvrokfxpjzj')
 
     asunto = 'Ha bajado el precio!'
-    cuerpo = 'Aqui tienes el link'
+    cuerpo = 'Aqui tienes el link -> https://www.amazon.es/dp/B07XRC3WXX'
 
-    msg = f"Subjet: {asunto}\n\n{cuerpo}"
+    msg = 'Subject: {}\n\n{}'.format(asunto, cuerpo)
     server.sendmail(
         'javiemg@gmail.com',
         'j_moregon@hotmail.com',
