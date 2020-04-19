@@ -11,18 +11,16 @@ def echo_N():
 #buscamos la etuiqueta, cogemos texto y quitamos espacios
     title_text = soup.find(id="productTitle").get_text().strip()
     title = title_text[15:27]+ ' Negro'
-    price = soup.find(id="priceblock_ourprice").get_text()
+    price_text = soup.find(id="priceblock_ourprice").get_text()
+    price = float(price_text.replace( ",",".")[0:5])
 #para la disponibilidad compobamos si 'no stock', si falla busca 'stock'
     try:
         stock = soup.find('span',{'class':'a-size-medium a-color-state'}).get_text()
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
-    
-    
-    
-    print(title)
-    print(price)
-    print(stock.strip())
+   #Envio de email si el precio baja
+    if(price < 99.99):
+        email(title,price,stock,URL)
 
 def echo_B():
     URL = 'https://www.amazon.es/dp/B07SNPKX63'
@@ -31,18 +29,16 @@ def echo_B():
 #buscamos la etuiqueta, cogemos texto y quitamos espacios
     title_text = soup.find(id="productTitle").get_text().strip()
     title = title_text[15:27]+ ' Blanco'
-    price = soup.find(id="priceblock_ourprice").get_text()
+    price_text = soup.find(id="priceblock_ourprice").get_text()
+    price = float(price_text.replace( ",",".")[0:5])
 #para la disponibilidad compobamos si 'no stock', si falla busca 'stock'
     try:
         stock = soup.find('span',{'class':'a-size-medium a-color-state'}).get_text().strip()
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
-
-
-
-    print(title)
-    print(price)
-    print(stock)
+#Envio de email si el precio baja
+    if(price < 99.99):
+        email(title,price,stock,URL)
 
 def USB():
     URL = 'https://www.amazon.es/dp/B07XRC3WXX'
@@ -58,15 +54,11 @@ def USB():
         stock = soup.find('span',{'class':'a-size-medium a-color-state'}).get_text().strip()
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
+#Envio de email si el precio baja
+    if(price < 14.99):
+        email(title,price,stock,URL)
 
-    if(price < 15.00):
-        email()
-
-    print(title)
-    print(price)
-    print(stock)
-
-def email():
+def email(title,price,stock,URL):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
     server.starttls()
@@ -75,8 +67,8 @@ def email():
     server.login('javiemg@gmail.com', 'efrgapvrokfxpjzj')
 
     asunto = 'Ha bajado el precio!'
-    cuerpo = 'Aqui tienes el link -> https://www.amazon.es/dp/B07XRC3WXX'
-
+    cuerpo = '{}\n{}\n{}\nAqui tienes el link -> {}'.format(title,price,stock,URL)
+    print(cuerpo)
     msg = 'Subject: {}\n\n{}'.format(asunto, cuerpo)
     server.sendmail(
         'javiemg@gmail.com',
