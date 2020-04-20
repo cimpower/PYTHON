@@ -94,6 +94,14 @@ def csv_w(title,price,stock,URL):
         #row.writerow(['ROW','TITULO','PRECIO','STOCK','LINK'])
         row.writerow(lista)
 
+def csv_r():
+
+    with open("./Python_Amazon/log.csv", "r") as log:
+        data = list(csv.reader(log))
+        price = data[2]
+        end_price = price[1]
+    print(end_price)
 USB()
 echo_N()
 echo_B()
+csv_r()
