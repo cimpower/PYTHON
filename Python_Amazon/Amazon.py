@@ -9,7 +9,7 @@ headers = {"User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleW
 # si no existe crealo desde cero solo son los nombres de las columnas
 
 
-def item_1():
+def item_1(old_price_item_1):
     URL = 'https://www.amazon.es/dp/B07SNPKX5Y'
     page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'lxml')
@@ -23,12 +23,12 @@ def item_1():
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
    
-    if(price < 99.99): #Envio de email si el precio baja
+    if(price < old_price_item_1): #Envio de email si el precio baja
         email(title,price,stock,URL)
 
     csv_a(title,price,stock,URL)
 
-def item_2():
+def item_2(old_price_item_2):
     URL = 'https://www.amazon.es/dp/B07SNPKX63'
     page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'lxml')
@@ -43,12 +43,12 @@ def item_2():
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
 
-    if(price < 99.99): #Envio de email si el precio baja
+    if(price < old_price_item_2): #Envio de email si el precio baja
         email(title,price,stock,URL)
 
     csv_a(title,price,stock,URL)
 
-def item_3(): 
+def item_3(old_price_item_3): 
     URL = 'https://www.amazon.es/dp/B07XRC3WXX'
     page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'lxml')
@@ -63,7 +63,7 @@ def item_3():
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
     #Envio de email si el precio baja
-    if(price < 14.99): 
+    if(price < old_price_item_3): 
         email(title,price,stock,URL)
 
     csv_a(title,price,stock,URL)
@@ -91,12 +91,24 @@ def email(title,price,stock,URL):
 
 def csv_r():
     with open("./Python_Amazon/log.csv", "r") as log:
-        data = list(csv.reader(log))
-        print(data)
-        price = data[2]
-        print(price)
-        end_price = price[1]
-        print(end_price)
+        rows = csv.reader(log)
+        for i,lista in enumerate(rows):
+            if i == 1:
+                old_price_item_1 = float(lista[1])
+                print (old_price_item_1)
+            elif i == 2:
+                old_price_item_2 = float(lista[1])
+                print(old_price_item_2)
+            elif i == 3:
+                old_price_item_3 = float(lista[1])
+                print(old_price_item_3)
+    #print (old_price_item_1,old_price_item_2,old_price_item_3)            
+    
+    csv_w()
+
+    item_1(old_price_item_1)
+    item_2(old_price_item_2)
+    item_3(old_price_item_3)
 
 def csv_w():
     with open('./Python_Amazon/log.csv','w') as log:
@@ -111,8 +123,5 @@ def csv_a(title,price,stock,URL):
         row.writerow(lista)
 
 csv_r()
-csv_w()
-#test
-item_1()
-item_2()
-item_3()
+
+
