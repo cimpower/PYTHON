@@ -95,20 +95,15 @@ def csv_r():
         for i,lista in enumerate(rows):
             if i == 1:
                 old_price_item_1 = float(lista[1])
-                print (old_price_item_1)
+                #print (old_price_item_1)
             elif i == 2:
                 old_price_item_2 = float(lista[1])
-                print(old_price_item_2)
+                #print(old_price_item_2)
             elif i == 3:
                 old_price_item_3 = float(lista[1])
-                print(old_price_item_3)
+                #print(old_price_item_3)
     #print (old_price_item_1,old_price_item_2,old_price_item_3)            
-    
-    csv_w()
-
-    item_1(old_price_item_1)
-    item_2(old_price_item_2)
-    item_3(old_price_item_3)
+    return old_price_item_1,old_price_item_2,old_price_item_3
 
 def csv_w():
     with open('./Python_Amazon/log.csv','w') as log:
@@ -122,6 +117,13 @@ def csv_a(title,price,stock,URL):
         row = csv.writer(log)
         row.writerow(lista)
 
-csv_r()
+# csv_r()
+# old_price_item_1,old_price_item_2,old_price_item_3 = csv_r()
+csv_w()
+print(old_price_item_1)
+print(old_price_item_2)
+print(old_price_item_3)
 
-
+item_1(old_price_item_1)
+item_2(old_price_item_2)
+item_3(old_price_item_3)
