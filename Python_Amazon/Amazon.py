@@ -5,15 +5,10 @@ import csv
 
 headers = {"User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36'}
 
-# si exist el archivo lee y guarda en lista, sino escribe machacando
-# si no existe crealo desde cero solo son los nombres de las columnas
-
-
 def item_1(old_price_item_1):
     URL = 'https://www.amazon.es/dp/B07SNPKX5Y'
     page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'lxml')
-
     title_text = soup.find(id="productTitle").get_text().strip() #buscamos la etiqueta, cogemos texto y quitamos espacios
     title = title_text[15:27]+ ' Negro'
     price_text = soup.find(id="priceblock_ourprice").get_text()
@@ -22,10 +17,10 @@ def item_1(old_price_item_1):
         stock = soup.find('span',{'class':'a-size-medium a-color-state'}).get_text()
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
-   
+    #Envio de email si el precio baja
     if(price < old_price_item_1): #Envio de email si el precio baja
         email(title,price,stock,URL)
-
+    #Añadimos nueva informacion al log,txt
     csv_a(title,price,stock,URL)
 
 def item_2(old_price_item_2):
@@ -37,22 +32,20 @@ def item_2(old_price_item_2):
     title = title_text[15:27]+ ' Blanco'
     price_text = soup.find(id="priceblock_ourprice").get_text()
     price = float(price_text.replace( ",",".")[0:5])
-
     try: #para la disponibilidad compobamos si 'no stock', si falla busca 'stock'
         stock = soup.find('span',{'class':'a-size-medium a-color-state'}).get_text().strip()
     except AttributeError:
         stock = soup.find('span',{'class':'a-size-medium a-color-success'}).get_text().strip()
-
+    #Envio de email si el precio baja
     if(price < old_price_item_2): #Envio de email si el precio baja
         email(title,price,stock,URL)
-
+    #Añadimos nueva informacion al log,txt
     csv_a(title,price,stock,URL)
 
 def item_3(old_price_item_3): 
     URL = 'https://www.amazon.es/dp/B07XRC3WXX'
     page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'lxml')
-
     title_text = soup.find(id="productTitle").get_text().strip() #buscamos la etuiqueta, cogemos texto y quitamos espacios
     title = title_text[8:26]+ ': Blanco'
     price_text = soup.find(id="priceblock_ourprice").get_text()
@@ -65,7 +58,7 @@ def item_3(old_price_item_3):
     #Envio de email si el precio baja
     if(price < old_price_item_3): 
         email(title,price,stock,URL)
-
+    #Añadimos nueva informacion al log,txt
     csv_a(title,price,stock,URL)
 
 def email(title,price,stock,URL):
@@ -117,12 +110,9 @@ def csv_a(title,price,stock,URL):
         row = csv.writer(log)
         row.writerow(lista)
 
-# csv_r()
-# old_price_item_1,old_price_item_2,old_price_item_3 = csv_r()
+csv_r()
+old_price_item_1,old_price_item_2,old_price_item_3 = csv_r()
 csv_w()
-print(old_price_item_1)
-print(old_price_item_2)
-print(old_price_item_3)
 
 item_1(old_price_item_1)
 item_2(old_price_item_2)
